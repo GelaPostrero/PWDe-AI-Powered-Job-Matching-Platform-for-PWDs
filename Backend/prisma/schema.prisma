@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  PWD
+  Employer
+  Administrator
+}
+
+enum AccountStatus {
+  Active
+  Inactive
+  Suspended
+  Deleted
+}
+
+enum Disability_Severity {
+  Mild
+  Moderate
+  Severe
+}
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+model Users {
+  user_Id        Int           @id @default(autoincrement())
+  email          String        @unique
+  password_hash  String
+  phone_number   String        @unique
+  user_type      UserType
+  account_status AccountStatus @default(Active)
+  is_verified    Boolean       @default(false)
+  created_at     String
+
+  messages         Chat_Message[]    @relation("SenderMessages")
+  pwd_Profile      Pwd_Profile?      @relation("UserToPWD")
+  employer_Profile Employer_Profile? @relation("UserToEmployer")
+}
+
+model Pwd_Profile {
+  pwd_Id              Int                 @id @default(autoincrement())
+  user_Id             Int                 @unique
+  first_name          String
+  last_name           String
+  middle_name         String
+  profile_picture     String
+  bio                 String
+  disability_Type     String
+  disability_severity Disability_Severity
+  accessibility_Needs String
+  location_City       String
+  location_Province   String
+  location_Country    String
+  date_of_birth       String
+  gender              Gender
+  rating              Float               @default(0.0)
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @updatedAt
+
+  user Users @relation("UserToPWD", fields: [user_Id], references: [user_Id], onDelete: Cascade)
+}
+
+model Employer_Profile {
+  employer_Id            Int      @id @default(autoincrement())
+  user_Id                Int      @unique
+  company_name           String
+  company_logo           String
+  company_description    String
+  accessibility_features String
+  industry               String
+  location_City          String
+  location_Province      String
+  location_Country       String
+  rating                 Float    @default(0.0)
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+
+  user Users @relation("UserToEmployer", fields: [user_Id], references: [user_Id], onDelete: Cascade)
+}
+
+model Chat_Thread {
+  thread_Id      Int     @id @default(autoincrement())
+  application_Id Int
+  pwd_Id         Int
+  employer_Id    Int
+  created_at     String
+  is_active      Boolean @default(true)
+
+  messages Chat_Message[] @relation("ThreadMessages")
+}
+
+model Chat_Message {
+  message_Id Int    @id @default(autoincrement())
+  thread_Id  Int
+  sender_Id  Int
+  content    String
+  created_at String
+
+  thread Chat_Thread @relation("ThreadMessages", fields: [thread_Id], references: [thread_Id], onDelete: Cascade)
+  sender Users       @relation("SenderMessages", fields: [sender_Id], references: [user_Id], onDelete: Cascade)
+}
