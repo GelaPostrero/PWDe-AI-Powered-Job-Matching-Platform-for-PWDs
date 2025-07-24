@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
 
 router.get('/users', async (req, res) => {
   const users = await prisma.users.findMany();
@@ -60,48 +58,48 @@ router.get('/users/pwd', async (req, res) => {
 });
 
 /*
-app.put('/users/:id', async (req, res) => {
-  const { id } = req.params;
-  const { email, password_hash, phone_number, user_type, account_status, is_verified } = req.body;
+  app.put('/users/:id', async (req, res) => {
+    const { id } = req.params;
+    const { email, password_hash, phone_number, user_type, account_status, is_verified } = req.body;
 
-  const userExists = await prisma.users.findUnique({
-    where: { user_Id: Number(id) }
-  });
-
-  if (!userExists) {
-    return res.status(404).json({ error: `User with ID ${id} not found` });
-  } else {
-    const user = await prisma.users.update({
-    where: { user_Id: Number(id) },
-    data: { 
-      email, 
-      password_hash, 
-      phone_number, 
-      user_type,
-      account_status,
-      is_verified 
-      }
+    const userExists = await prisma.users.findUnique({
+      where: { user_Id: Number(id) }
     });
-    res.json(user);
-  }
-});
 
-app.delete('/users/:id', async (req, res) => {
-  const { id } = req.params;
-
-  const userExists = await prisma.users.findUnique({
-    where: { user_Id: Number(id) }
+    if (!userExists) {
+      return res.status(404).json({ error: `User with ID ${id} not found` });
+    } else {
+      const user = await prisma.users.update({
+      where: { user_Id: Number(id) },
+      data: { 
+        email, 
+        password_hash, 
+        phone_number, 
+        user_type,
+        account_status,
+        is_verified 
+        }
+      });
+      res.json(user);
+    }
   });
 
-  if (!userExists) {
-    return res.status(404).json({ error: `User with ID ${id} not found` });
-  }
+  app.delete('/users/:id', async (req, res) => {
+    const { id } = req.params;
 
-  await prisma.users.delete({
-    where: { user_Id: Number(id) }
+    const userExists = await prisma.users.findUnique({
+      where: { user_Id: Number(id) }
+    });
+
+    if (!userExists) {
+      return res.status(404).json({ error: `User with ID ${id} not found` });
+    }
+
+    await prisma.users.delete({
+      where: { user_Id: Number(id) }
+    });
+    res.json({ message: `User ${id} deleted` });
   });
-  res.json({ message: `User ${id} deleted` });
-});
 */
 
 module.exports = router;

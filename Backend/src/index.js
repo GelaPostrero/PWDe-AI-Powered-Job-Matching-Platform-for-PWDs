@@ -1,15 +1,15 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
 const cors = require('cors');
-const usersRouter = require('../Accounts/Users');
+const { PrismaClient } = require('@prisma/client');
+const { withAccelerate } = require('@prisma/extension-accelerate');
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient().$extends(withAccelerate());
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/accounts', usersRouter);
 
+app.use('/accounts', usersRouter);
 
 /*
 app.put('/users/:id', async (req, res) => {
@@ -55,4 +55,5 @@ app.delete('/users/:id', async (req, res) => {
   res.json({ message: `User ${id} deleted` });
 });
 */
+
 app.listen(4000, () => console.log(`Server running on http://localhost:4000`));
