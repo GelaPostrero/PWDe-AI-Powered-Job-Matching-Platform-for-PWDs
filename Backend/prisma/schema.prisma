@@ -128,7 +128,7 @@ model Users {
   user_type      UserType
   account_status AccountStatus @default(Active)
   is_verified    Boolean       @default(false)
-  created_at     DateTime      @default(now())
+  created_at     String
 
   messages              Chat_Message[]        @relation("SenderMessages")
   pwd_Profile           Pwd_Profile?          @relation("UserToPWD")
@@ -145,24 +145,23 @@ model Users {
 }
 
 model Pwd_Profile {
-  pwd_id              Int                 @id @default(autoincrement())
-  user_id             Int                 @unique
+  pwd_id              Int                  @id @default(autoincrement())
+  user_id             Int                  @unique
   first_name          String
   last_name           String
   middle_name         String
-  profile_picture     String
-  bio                 String
-  disability_Type     String
-  disability_severity Disability_Severity
-  accessibility_Needs String
-  location_City       String
-  location_Province   String
-  location_Country    String
+  profile_picture     String?
+  pwd_document        String?
+  bio                 String?
+  disability_Type     String?
+  disability_severity Disability_Severity?
+  accessibility_Needs String?
+  address             String
   date_of_birth       DateTime
   gender              Gender
-  rating              Float               @default(0.0)
-  created_at          DateTime            @default(now())
-  updated_at          DateTime            @updatedAt
+  rating              Float?               @default(0.0)
+  created_at          String
+  updated_at          DateTime?            @updatedAt
 
   user             Users              @relation("UserToPWD", fields: [user_id], references: [user_id], onDelete: Cascade)
   resumes          Resumes[]
@@ -172,19 +171,24 @@ model Pwd_Profile {
 }
 
 model Employer_Profile {
-  employer_id            Int      @id @default(autoincrement())
-  user_id                Int      @unique
-  company_name           String
-  company_logo           String
-  company_description    String
-  accessibility_features String
-  industry               String
-  location_City          String
-  location_Province      String
-  location_Country       String
-  rating                 Float    @default(0.0)
-  created_at             DateTime @default(now())
-  updated_at             DateTime @updatedAt
+  employer_id                 Int      @id @default(autoincrement())
+  user_id                     Int      @unique
+  first_name                  String
+  last_name                   String
+  middle_name                 String
+  profile_picture             String?
+  company_website             String?
+  LinkedIn_profile            String?
+  Other_Social_Media          String?
+  contact_person_fullname     String?
+  contact_person_job_title    String?
+  contact_person_phone_number String?
+  address                     String
+  date_of_birth               DateTime
+  gender                      Gender
+  rating                      Float    @default(0.0)
+  created_at                  String
+  updated_at                  DateTime @updatedAt
 
   user         Users          @relation("UserToEmployer", fields: [user_id], references: [user_id], onDelete: Cascade)
   job_listings Job_Listings[]

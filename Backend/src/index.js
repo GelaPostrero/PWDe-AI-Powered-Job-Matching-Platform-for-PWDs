@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('./generated/prisma');
 const { withAccelerate } = require('@prisma/extension-accelerate');
+const userRouter = require('../Accounts/Users');
 
 const prisma = new PrismaClient().$extends(withAccelerate());
 const app = express();
@@ -9,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/accounts', usersRouter);
+app.use('/accounts', userRouter);
 
 /*
 app.put('/users/:id', async (req, res) => {
