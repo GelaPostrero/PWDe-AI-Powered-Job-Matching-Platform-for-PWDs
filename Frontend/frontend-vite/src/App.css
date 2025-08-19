@@ -1,8 +1,20 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  background: #ffffff; /* Ensure no gradient */
+}
+
+.main-content {
+  min-height: 100vh;
+  width: 100vw;
+  /* Remove any gradient background here if present */
 }
 
 .logo {
@@ -16,6 +28,9 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+button, a {
+  cursor: pointer;
 }
 
 @keyframes logo-spin {

@@ -1,12 +1,13 @@
 import React from 'react';
-import logo from '../../assets/logo.png'; // Assuming your logo path is correct
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 
-const Logo = ({ showText = false }) => {
+const Logo = ({ showText = false, to = '/' }) => {
   return (
-    <div className="flex items-center space-x-2">
+    <Link to={to} className="flex items-center space-x-2" aria-label="PWDe Home">
       <img src={logo} alt="PWDe Logo" className="w-8 h-8" />
       {showText && <h1 className="text-xl font-bold text-blue-500">PWDe</h1>}
-    </div>
+    </Link>
   );
 };
 
